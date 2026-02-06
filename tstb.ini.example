@@ -1,0 +1,7 @@
+# Example configuration for tstb
+
+# By default, do not do anything
+default=ignore
+
+# Except to vlc, which should be stopped
+vlc=stop

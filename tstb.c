@@ -269,7 +269,7 @@ status load_config(char *path){
 }
 
 int init(){
-	load_config("/home/hue/.config/usersleep.ini");
+	load_config("/home/hue/.config/tstb.ini");
 
 	proc_arr = malloc(sizeof(struct process) * PROC_INIT_SIZE);
 	if (!proc_arr){
