@@ -1,6 +1,7 @@
 ODIR=obj
 CC=gcc
-CFLAGS=-Wall -O3
+CFLAGS=-Wall -O3 -g
+OUT_NAME=usersleep
 
 OBJS=main.o usersleep.o
 
@@ -8,4 +9,7 @@ OBJS=main.o usersleep.o
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 build: $(OBJS)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -o $(OUT_NAME) $^ $(CFLAGS)
+
+clean:
+	rm $(OBJS) $(OUT_NAME)
