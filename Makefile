@@ -1,9 +1,9 @@
 ODIR=obj
 CC=gcc
 CFLAGS=-Wall -O3 -g
-OUT_NAME=usersleep
+OUT_NAME=tstb
 
-OBJS=main.o usersleep.o
+OBJS=main.o tstb.o
 
 %.o: %.c %.h
 	$(CC) -c -o $@ $< $(CFLAGS)

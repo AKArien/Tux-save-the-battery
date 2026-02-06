@@ -235,9 +235,6 @@ status load_config(char *path){
 	config_rules_count = 0;
 	config_rules_size = CONF_INIT_SIZE;
 
-	// first, register a rule to ignore ourselves
-	// register_rule("usersleep", "ignore");
-
 	while (1){
 		#define BUF_SIZE 100
 		char *buf = malloc(BUF_SIZE * sizeof(char));
