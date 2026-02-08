@@ -1,9 +1,8 @@
-ODIR=obj
 CC=gcc
 CFLAGS=-Wall -O3 -g
 OUT_NAME=tstb
 
-OBJS=main.o tstb.o
+OBJS=src/main.o src/tstb.o
 
 %.o: %.c %.h
 	$(CC) -c -o $@ $< $(CFLAGS)
