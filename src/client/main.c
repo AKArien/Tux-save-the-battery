@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 
 #include "../tstb-types.h"
+#include "../tstb-common.h"
 
 int main(int argc, char *argv[]){
 	char *path = "/tmp/tstbd.sock";
@@ -72,9 +73,7 @@ int main(int argc, char *argv[]){
 		memcpy(buf + pos, argv[2], target_len);
 		pos += target_len;
 
-		size_t action_len = strlen(argv[3]) + 1;
-		memcpy(buf + pos, argv[3], action_len);
-		pos += action_len;
+		buf[pos++] = (char)get_rule_for(argv[3]);
 	}
 	else {
 		fprintf(stderr, "Unknown command: %s\n", argv[1]);

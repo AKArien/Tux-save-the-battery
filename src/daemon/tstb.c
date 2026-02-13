@@ -12,6 +12,11 @@
 #include <sys/types.h>
 
 #include "../tstb-types.h"
+#include "../tstb-common.h"
+
+#define CONF_INIT_SIZE 8
+#define PROC_INIT_SIZE 8
+#define FAIL_INIT_SIZE 4
 
 enum rule default_rule;
 int config_rules_count, config_rules_size;
@@ -64,7 +69,7 @@ int apply_all(int signal, struct process **failures){
 	return fail_i;
 }
 
-enum rule get_rules_for(char *proc_name){
+enum rule get_reg_rule_for(char *proc_name){
 	int l = 0;
 	int r = config_rules_count;
 	while (l < r){
@@ -125,7 +130,7 @@ status register_proc(unsigned pid, char *path){
 	char proc_name[100];
 	fgets(proc_name, 100, cmdline);
 	fclose(cmdline);
-	proc->rule = get_rules_for(proc_name);
+	proc->rule = get_reg_rule_for(proc_name);
 	proc_arr_count++;
 	return OK;
 }
@@ -153,22 +158,9 @@ status register_all_procs(){
 
 }
 
-int get_rule_flag_for(char *string){
-	int flags = INVALID;
-	#define match(config, flag) if (!strcmp(string, config)){ flags = flags | flag; }
-	// if (!strcmp(string, "ignore")){
-	// 	flags = flags | DONT_MANAGE;
-	// }
-	match("ignore", DONT_MANAGE)
-	match("stop", STOP)
-	match("wake_on_sock", WAKE_ON_SOCK)
-	#undef match
-	return flags;
-}
-
-status register_rule(char *target, char *action){
+status register_rule(char *target, enum rule action){
 	if (!strcmp(target, "default")){
-		default_rule = get_rule_flag_for(action);
+		default_rule = action;
 	}
 	else {
 		// append the rule to the end of config_rules, the caller is expected to sort after adding the rules
@@ -189,7 +181,7 @@ status register_rule(char *target, char *action){
 
 		// fill out the rule
 		rule->name = target;
-		rule->rule = get_rule_flag_for(action);
+		rule->rule = action;
 	}
 	return OK;
 }
@@ -248,7 +240,7 @@ status load_config(char *path){
 		char *tt = trim_spaces(target);
 		char *bt = trim_spaces(buf);
 		// buf now holds the action
-		register_rule(tt, bt);
+		register_rule(tt, get_rule_for(bt));
 		// free(buf);
 		#undef BUF_SIZE
 	}
@@ -301,7 +293,7 @@ int tstb_daemon(char *path){
 				case IPC_SEND_ALL:
 					struct process **failures;
 					apply_all(buf[++i], failures);
-				break;
+					break;
 
 				case IPC_SEND_PID:
 					// int pid = 0;
@@ -309,13 +301,13 @@ int tstb_daemon(char *path){
 						pid = pid | (unsigned char)buf[++i] << (a * CHAR_BIT);
 					}
 					apply_by_pid(pid, (int)buf[++i]);
-				break;
+					break;
 
 				case IPC_SEND_NAM:
 					char *name_end = strchr(buf + i + 1, '\0');
 					apply_by_name(buf + i, (int)name_end + 1);
 					i = (int)(name_end - buf);
-				break;
+					break;
 
 				case IPC_REG_PROC:
 					// int pid = 0;
@@ -323,14 +315,14 @@ int tstb_daemon(char *path){
 						pid = pid | (unsigned char)buf[++i] << (a * CHAR_BIT);
 					}
 					register_proc_if_owned(pid);
-				break;
+					break;
 
 				case IPC_REG_RULE:
-					char *target_end = strchr(buf + i, '\0'); 
-					char *action_end = strchr(target_end + 1, '\0');
-					register_rule(buf + i, target_end + 1);
-					i = (int)(action_end - buf);
-				break;
+					char *target_end = strchr(buf + i, '\0');
+					enum rule action = (enum rule)*(target_end + 1);
+					register_rule(buf + i, action);
+					i = (int)(++target_end - buf);
+					break;
 			}
 		}
 

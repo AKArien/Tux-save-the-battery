@@ -38,8 +38,4 @@ typedef int status;
 #define OOM 2
 #define NOT_OURS 3
 
-#define CONF_INIT_SIZE 8
-#define PROC_INIT_SIZE 8
-#define FAIL_INIT_SIZE 4
-
 #endif
