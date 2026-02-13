@@ -1,6 +1,6 @@
 # Tux save the battery
 
-<img align="left" src="./keep calm and stay on.svg">
+![Keep calm and stay on](./keep-calm-and-stay-on.svg)
 
 Please note this software is still in very early development and currently working towards a proof of concept stage. Don’t try to use it yet if you haven’t read and understood all the code and it’s shortcomings. A lot is yet unimplemented, any contributions are of course welcome
 
