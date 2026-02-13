@@ -1,14 +1,22 @@
 CC=gcc
 CFLAGS=-Wall -O3 -g
-OUT_NAME=tstb
+DAEMON_OUT=tstbd
+CLIENT_OUT=tstbc
 
-OBJS=src/main.o src/tstb.o
+DAEMON_OBJS=src/daemon/main.o src/daemon/tstb.o
+CLIENT_OBJS=src/client/main.o
 
 %.o: %.c %.h
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-build: $(OBJS)
-	$(CC) -o $(OUT_NAME) $^ $(CFLAGS)
+all: daemon client
+
+	
+daemon: $(DAEMON_OBJS)
+	$(CC) -o $(DAEMON_OUT) $^ $(CFLAGS)
+
+client: $(CLIENT_OBJS)
+	$(CC) -o $(CLIENT_OUT) $^ $(CFLAGS)
 
 clean:
-	rm $(OBJS) $(OUT_NAME)
+	rm $(DAEMON_OBJS) $(CLIENT_OBJS) $(DAEMON_OUT) $(CLIENT_OUT)
