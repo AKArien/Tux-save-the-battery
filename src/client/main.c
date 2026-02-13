@@ -6,7 +6,7 @@
 #include <sys/un.h>
 #include <sys/socket.h>
 
-#include "../ipc-codes.h"
+#include "../tstb-types.h"
 
 int main(int argc, char *argv[]){
 	char *path = "/tmp/tstbd.sock";

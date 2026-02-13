@@ -11,41 +11,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "../ipc-codes.h"
-
-enum states {
-	STATE_RUNNING,
-	STATE_STOPPED
-};
-
-enum rule {
-	INVALID,
-	DONT_MANAGE,
-	STOP,
-	WAKE_ON_SOCK
-};
-
-struct config_rule {
-	char *name;
-	enum rule rule;
-};
-
-struct process {
-	int pid;
-	enum rule rule;
-
-};
-
-typedef int status;
-#define OK 0
-#define CANT_OPEN_FILE 1
-#define OOM 2
-#define NOT_OURS 3
-
-#define CONF_INIT_SIZE 8
-#define PROC_INIT_SIZE 8
-#define FAIL_INIT_SIZE 4
-
+#include "../tstb-types.h"
 
 enum rule default_rule;
 int config_rules_count, config_rules_size;
