@@ -1,3 +1,4 @@
 *.o
 tstbd
-tstbc
+tstbc.so
+tstbcli
