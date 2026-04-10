@@ -111,12 +111,13 @@ int tstbc_add_reg_proc(struct tstbc_buf *buf, unsigned pid){
 	return 0;
 }
 
-int tstbc_add_reg_rule(struct tstbc_buf *buf, char *name, enum rule){
+int tstbc_add_reg_rule(struct tstbc_buf *buf, char *name, enum rule rule){
 	size_t len = strlen(name);
 	extend_buf_if_needed(len + 2)
 	buf->buf[buf->pos++] = IPC_REG_RULE;
 	memcpy(buf->buf + buf->pos, name, len);
 	buf->pos += len;
+	buf->buf[buf->pos++] = (char)rule;
 	return 0;
 }
 
